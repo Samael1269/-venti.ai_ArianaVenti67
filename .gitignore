@@ -1,0 +1,33 @@
+# Logs
+**/logs
+**/*.log
+**/npm-debug.log*
+
+# Node / React
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/*.local
+
+# Editor directories and files
+.vscode/
+.idea/
+**/.vscode/
+**/.idea/
+**/*.suo
+**/*.ntvs*
+**/*.njsproj
+**/*.sln
+**/*.sw?
+
+# Java / Spring Boot
+**/target/
+**/bin/
+**/build/
+**/out/
+
+# Secrets (DO NOT COMMIT SECRETS TO GITHUB!)
+**/credentials.json
+**/.env
+**/.env.local
+**/application-local.properties

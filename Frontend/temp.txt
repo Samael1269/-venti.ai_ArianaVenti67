@@ -1,0 +1,138 @@
+﻿          <div className="space-y-8">
+            
+            {/* Front Page Smart Calendar & AI Assistant Layout */}
+            <div className="border-b border-[#111111] pb-8">
+              <div className="flex justify-between items-end mb-6">
+                <div>
+                  <span className="text-[#CC0000] font-mono text-xs font-black uppercase tracking-widest block mb-2">
+                    SCHEDULE & PLANNING
+                  </span>
+                  <h2 className="font-serif font-bold text-4xl md:text-6xl tracking-tight leading-[0.95]">
+                    Smart Calendar
+                  </h2>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left Column: Monthly Calendar View & Today's Clients */}
+                <div className="lg:col-span-7 xl:col-span-8 space-y-8">
+                  {/* Calendar Box */}
+                  <div className="border border-[#111111] bg-white p-6">
+                    <div className="flex justify-between items-center mb-6 border-b border-[#111111] pb-3">
+                      <h3 className="font-serif font-bold text-2xl uppercase">{monthNames[currentMonth]} {currentYear}</h3>
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={() => {
+                            if (currentMonth === 0) { setCurrentMonth(11); setCurrentYear(y => y - 1); }
+                            else { setCurrentMonth(m => m - 1); }
+                          }}
+                          className="border border-[#111111] p-1 hover:bg-neutral-100"
+                        >&lt;</button>
+                        <button 
+                          onClick={() => {
+                            setCurrentMonth(5); // Reset to June
+                            setCurrentYear(2026);
+                            setSelectedCalendarDate(20);
+                          }}
+                          className="border border-[#111111] px-3 py-1 font-mono text-xs uppercase font-bold hover:bg-neutral-100"
+                        >Today</button>
+                        <button 
+                          onClick={() => {
+                            if (currentMonth === 11) { setCurrentMonth(0); setCurrentYear(y => y + 1); }
+                            else { setCurrentMonth(m => m + 1); }
+                          }}
+                          className="border border-[#111111] p-1 hover:bg-neutral-100"
+                        >&gt;</button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-px bg-[#111111] border border-[#111111]">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
+                        <div key={day} className="bg-white p-2 text-center font-mono text-[10px] font-black uppercase tracking-wider text-neutral-600">
+                          {day}
+                        </div>
+                      ))}
+                      {Array.from({ length: startDay }).map((_, i) => (
+                        <div key={`start-${i}`} className="bg-[#F9F9F7] p-2 min-h-[80px]"></div>
+                      ))}
+                      {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
+                        const isJune2026Day = currentYear === 2026 && currentMonth === 5;
+                        const isToday = isJune2026Day && day === 20;
+                        const isSelected = isJune2026Day && selectedCalendarDate === day;
+                        
+                        const dayMeetings = meetings.filter(m => m.day === day && isJune2026Day);
+                        const hasMeetings = dayMeetings.length > 0;
+                        
+                        return (
+                          <div
+                            key={day}
+                            onClick={() => {
+                              if (isJune2026Day) setSelectedCalendarDate(day);
+                            }}
+                            className={`bg-white p-2 min-h-[80px] cursor-pointer transition-colors relative border-[3px] border-transparent hover:border-neutral-300 group ${isSelected ? "border-[#CC0000] z-10" : ""}`}
+                          >
+                            <span className={`font-mono text-xs font-bold ${isToday ? "bg-[#111111] text-white px-1" : ""}`}>
+                              {day}
+                            </span>
+                            
+                            {hasMeetings && (
+                              <div className="mt-2 space-y-1">
+                                {dayMeetings.map((m, i) => (
+                                  <div key={i} className="bg-[#E5E5E0] text-[8px] font-mono p-1 uppercase leading-tight truncate border-l-2 border-[#111111]">
+                                    {m.time} {m.name}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Hover Pop-up */}
+                            {hasMeetings && (
+                              <div className="hidden group-hover:block absolute left-full top-0 ml-2 bg-[#111111] text-[#F9F9F7] p-3 w-48 z-50 border border-[#111111] shadow-xl">
+                                <h5 className="font-serif font-bold text-sm border-b border-neutral-600 pb-1 mb-2">June {day}, 2026</h5>
+                                <div className="space-y-2">
+                                  {dayMeetings.map((m, i) => (
+                                    <div key={`pop-${i}`} className="font-mono text-[10px] leading-tight">
+                                      <span className="text-[#CC0000] font-black">{m.time}</span><br />
+                                      {m.name}<br />
+                                      <span className="text-neutral-400">{m.type}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                      {Array.from({ length: paddingEnd }).map((_, i) => (
+                        <div key={`end-${i}`} className="bg-[#F9F9F7] p-2 min-h-[80px]"></div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column: Auto-Generated Daily Brief */}
+                <div className="lg:col-span-5 xl:col-span-4 border-4 border-[#111111] bg-white p-6 relative hard-shadow-hover">
+                  <span className="absolute -top-4 left-6 bg-[#CC0000] text-white px-3 py-1 font-mono text-[10px] font-black uppercase tracking-wider">
+                    OFFICIAL DAILY BRIEF
+                  </span>
+                  
+                  {isLoadingBrief ? (
+                     <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                       <Sparkles className="w-8 h-8 text-[#CC0000] animate-pulse" />
+                       <span className="font-mono text-xs uppercase tracking-widest text-[#111111] font-bold">Synthesizing Intel...</span>
+                     </div>
+                  ) : morningBrief ? (
+                    <div className="text-[#111111] font-body text-sm whitespace-pre-wrap leading-relaxed">
+                      {formatMarkdown(morningBrief)}
+                    </div>
+                  ) : (
+                    <div className="text-neutral-500 font-mono text-xs uppercase italic py-8 text-center">
+                      Awaiting Intelligence Generation...
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            </div>
+
