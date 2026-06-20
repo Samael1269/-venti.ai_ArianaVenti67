@@ -1,11 +1,25 @@
 # Venti.ai / Advisor360 AI Platform
 
-This repository contains the full integrated codebase for the **Advisor360 AI** (Venti.ai) platform.
+This repository contains the full integrated codebase and database assets for the **Advisor360 AI** (Venti.ai) platform.
 
 ## 📂 Repository Structure
 
 - **`Frontend/`**: The React + Vite client web application, coupled with a Node.js Google Calendar API helper server.
-- **`Backend/`**: (To be added) The Spring Boot REST API layer connected to the MySQL database.
+- **`Backend/`**: The Spring Boot REST API layer.
+- **`database/`**: Contains the **Entity Relationship Diagram (`ERD.png`)** for database design visualization and the exported DDL construction script (`schema.sql`) to initialize your MySQL database.
+
+---
+
+## 🗄️ Database Setup (using schema.sql)
+
+To construct the database on your own machine:
+1. Ensure your local MySQL instance is running (e.g. through XAMPP or MySQL Service).
+2. Open phpMyAdmin or your MySQL workbench and run the DDL schema script:
+   - Create a database named `advisor360_db`:
+     ```sql
+     CREATE DATABASE advisor360_db;
+     ```
+   - Import **`database/schema.sql`** into the `advisor360_db` database to construct all entity tables (including `advisor` and `client` tables and their foreign key relationships).
 
 ---
 
@@ -13,5 +27,5 @@ This repository contains the full integrated codebase for the **Advisor360 AI** 
 
 Please check the individual directories for detailed configuration and setup steps:
 
-- For frontend configuration, local server details, and Google Calendar sync setup, read the **[Frontend README](Frontend/README.md)**.
-- For backend REST API configuration, database schema validation, and Spring Data JPA settings, check the **Backend** documentation once added.
+- Read **[Frontend/README.md](Frontend/README.md)** to configure and start the React app & calendar sync server.
+- Read **[Backend/README.md](Backend/README.md)** to configure and launch the Spring Boot REST API.

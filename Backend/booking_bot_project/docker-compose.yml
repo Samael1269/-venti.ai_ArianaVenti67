@@ -1,0 +1,22 @@
+
+services:
+  bot_engine:
+    build: .
+    container_name: telegram_daemon_core
+    restart: always
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - GRAFILAB_API_KEY=${GRAFILAB_API_KEY}
+    volumes:
+      - .:/app
+
+  retention_worker:
+    build: .
+    container_name: retention_cron_worker
+    restart: always
+    command: python followup.py
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - GRAFILAB_API_KEY=${GRAFILAB_API_KEY}
+    volumes:
+      - .:/app
