@@ -142,8 +142,10 @@ Ensure you have **Node.js**, **Java 17 (JDK)**, **Python 3.10+**, and **MySQL** 
 
 ### Step 4: Run the Telegram Bot & Follow-up Engine
 1. Obtain a Telegram Bot Token from `@BotFather` and a Grafilab API Key.
-2. Open a terminal at `/booking_bot_project`.
-3. Set environment variables:
+2. Open a terminal at the `/booking_bot_project` directory.
+
+#### Option A: Local Native Deployment (Python)
+1. **Set Environment Variables**:
    - **Windows (PowerShell):**
      ```powershell
      $env:TELEGRAM_TOKEN="your_telegram_bot_token_here"
@@ -154,16 +156,41 @@ Ensure you have **Node.js**, **Java 17 (JDK)**, **Python 3.10+**, and **MySQL** 
      export TELEGRAM_TOKEN="your_telegram_bot_token_here"
      export GRAFILAB_API_KEY="your_grafilab_api_key_here"
      ```
-4. Create a virtual environment, install requirements, and run the bot:
+2. **Install and Run**:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    pip install -r requirements.txt
    python bot.py
    ```
-5. Start the background follow-up worker in a separate terminal:
+3. **Start the Follow-up Engine** (in a separate terminal with same environment variables):
    ```bash
    python followup.py
+   ```
+
+#### Option B: Containerized Deployment (Docker)
+1. **Build the Image**:
+   ```bash
+   docker build -t telegram-booking-bot .
+   ```
+2. **Run the Interactive Bot Container**:
+   ```bash
+   docker run -d \
+     --name booking-bot-instance \
+     -e TELEGRAM_TOKEN="your_telegram_bot_token_here" \
+     -e GRAFILAB_API_KEY="your_grafilab_api_key_here" \
+     -v $(pwd)/credentials.json:/app/credentials.json \
+     -v $(pwd)/interactions.db:/app/interactions.db \
+     telegram-booking-bot
+   ```
+3. **Run the Background Follow-up Worker Container**:
+   ```bash
+   docker run -d \
+     --name fallback-worker-instance \
+     -e TELEGRAM_TOKEN="your_telegram_bot_token_here" \
+     -e GRAFILAB_API_KEY="your_grafilab_api_key_here" \
+     -v $(pwd)/interactions.db:/app/interactions.db \
+     telegram-booking-bot python followup.py
    ```
 
 ### Step 5: Run the Frontend Dashboard
