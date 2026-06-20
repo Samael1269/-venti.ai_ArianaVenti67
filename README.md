@@ -1,8 +1,42 @@
-# Venti.ai / Advisor360 AI Platform
+# Venti.ai (Advisor360 AI Platform)
 
-Advisor360 AI (Venti.ai) is a modern, high-fidelity platform built for financial advisors and advisory firms. Designed with a striking "Newsprint" Neo-Brutalist aesthetic, the platform integrates live client relationship management (CRM) with smart calendar scheduling, regulatory compliance tracking, and AI-driven intelligence.
+Venti.ai is a modern, high-fidelity platform built for financial advisors and advisory firms. Designed with a striking "Newsprint" Neo-Brutalist aesthetic, the platform integrates live client relationship management (CRM) with smart calendar scheduling, regulatory compliance tracking, and AI-driven intelligence.
 
 To bridge the gap between advisors and their clients, the platform features a web-based **Advisor Dashboard** and an asynchronous customer-facing **Telegram Booking Bot**.
+
+---
+
+## 👥 Team Members
+
+* **Satheesan A/L Mathialagan** (sath.mk1010@gmail.com)
+* **Chin Yong Hao** (chinyonghao29@gmail.com)
+* **Shawn Soon** (shawnsoon.ss@gmail.com)
+
+---
+
+## 🎯 Challenge and Approach
+
+### The Challenge
+Financial advisors face severe administrative bottlenecks due to fragmented tools:
+- **Scheduling Friction**: Setting up meetings requires tedious back-and-forth coordination.
+- **CRM Administrative Load**: Manual logging of client interactions, background notes, and timeline histories takes up hours of productive time.
+- **Compliance Overhead**: Advisors must stay updated on tax laws and compliance standards while keeping track of their Continuing Professional Development (CPD) requirements.
+
+### Our Approach
+We built **Venti.ai** as a unified monorepo system combining a backend API, frontend dashboard, and automated Telegram booking agent:
+1. **Advisor Dashboard (Frontend)**: Developed a Vite + React web application styled in a retro-minimalist "Newsprint" design system to keep data dense, highly scannable, and aesthetically premium.
+2. **REST API (Backend)**: Built a secure **Spring Boot REST API** integrated with a **MySQL database** to handle structured CRUD mutations for client memory.
+3. **Natural Language Assistant (Telegram Bot)**: Coded a Python bot that parses natural language messages (e.g. *"Let's meet tomorrow at 10 AM"*), maps client data inside a local SQLite database, and automatically books events via **Google Calendar API** using Service Account scopes.
+4. **Calendar Sync**: Created an Express-based polling synchronization helper that seamlessly mirrors the advisor's calendar schedule on the dashboard in real-time.
+
+---
+
+## 🤖 AI Usage Attribution
+
+We credited the following AI engines for assistance during the development of this project:
+- **Code & Integration Assistance**: Code integration, MySQL schema mapping, master `.gitignore` setup, and monorepo compilation assisted by **Antigravity** (Advanced Agentic Coding AI designed by the Google DeepMind team).
+- **Natural Language Parsing**: Client booking intent analysis and date-time extraction handled by **Grafilab API** (using `grafilab/qwen3.6-flash`).
+- **Advisor CRM Intelligence & Inquiry Desk**: Custom client opportunities analysis and compliance information matching powered by **Google Gemini Pro API**.
 
 ---
 
@@ -40,11 +74,6 @@ The platform operates as a secure, distributed multi-tier architecture:
                         └───────────┘       └───────────┘
 ```
 
-- **Frontend**: Styled with a Neo-Brutalist, custom newsprint-inspired design system.
-- **Node.js Helper Server**: Proxies `/api/calendar` calls to manage calendar events via the **Google Calendar API** using Service Account OAuth credentials.
-- **Spring Boot Backend**: Exposes client record management REST endpoints under `/api/clients` on port `8080`.
-- **MySQL Database**: Acts as the system of record for client memory and advisor settings.
-
 ### 2. Telegram Bot Integration
 The Telegram Bot integrates natively into the wider Advisor360 AI eco-system as the customer-facing bridge:
 
@@ -74,15 +103,9 @@ The Telegram Bot integrates natively into the wider Advisor360 AI eco-system as 
      └──────────────┘              └──────────────┘
 ```
 
-- **Telegram Bot Engine (`bot.py`)**: Asynchronously listens for messages, managing states and interactions.
-- **Grafilab LLM Engine**: Employs `grafilab/qwen3.6-flash` over an OpenAI-compatible endpoint to extract dates, intents, and client requirements.
-- **Google Calendar API**: Books and patches appointment intervals directly using shared Service Account access tokens.
-- **SQLite Database**: Serves as the localized interaction layer, logging historical data points to keep information aligned with the core dashboard tracking.
-- **Follow-up Engine (`followup.py`)**: Background cron engine evaluating dormant leads to trigger smart re-engagement outreach.
-
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Technologies Used
 
 | Component | Technologies |
 | :--- | :--- |
@@ -113,7 +136,8 @@ The Telegram Bot integrates natively into the wider Advisor360 AI eco-system as 
 
 ## 🚀 Getting Started & Local Setup
 
-Ensure you have **Node.js**, **Java 17 (JDK)**, **Python 3.10+**, and **MySQL** (via XAMPP or Docker) installed on your system.
+> [!IMPORTANT]
+> Ensure you have **Node.js (v18+)**, **Java 17 (JDK)**, **Python 3.10+**, and **MySQL** (via XAMPP or Docker) installed on your system before proceeding.
 
 ### Step 1: Database Setup
 1. Start your MySQL Server on port `3306`.
@@ -121,8 +145,8 @@ Ensure you have **Node.js**, **Java 17 (JDK)**, **Python 3.10+**, and **MySQL** 
    ```sql
    CREATE DATABASE advisor360_db;
    ```
-3. Import **`database/schema.sql`** into the `advisor360_db` database to construct all entity tables (including `advisor` and `client` tables and their foreign key relationships).
-4. Start XAMPP and verify the schema matches phpMyAdmin.
+3. > [!IMPORTANT]
+   > Import **`database/schema.sql`** into the `advisor360_db` database to construct all entity tables (including `advisor` and `client` tables and their foreign key relationships) before starting the backend.
 
 ### Step 2: Spring Boot Backend Setup
 1. Open a terminal at the `/Backend` directory.
@@ -134,9 +158,10 @@ Ensure you have **Node.js**, **Java 17 (JDK)**, **Python 3.10+**, and **MySQL** 
 
 ### Step 3: Configure Google Calendar & API Credentials
 1. Create a project in the Google Cloud Console, enable the **Google Calendar API**, and generate a **Service Account JSON Key**.
-2. Save this downloaded file as `credentials.json` in both:
-   - The `/Frontend` directory (for the dashboard).
-   - The `/booking_bot_project` directory (for the Telegram bot).
+2. > [!IMPORTANT]
+   > Save this downloaded file as `credentials.json` in both:
+   > - The `/Frontend` directory.
+   > - The `/booking_bot_project` directory.
 3. Copy the `client_email` from the JSON, open your target Google Calendar settings, and share it with that email address with **"Make changes to events"** permissions.
 4. Update the calendar ID inside `/Frontend/server.js` (`TARGET_CALENDAR_ID`) and environment variables.
 
@@ -202,7 +227,11 @@ Ensure you have **Node.js**, **Java 17 (JDK)**, **Python 3.10+**, and **MySQL** 
    ```
    *(This starts concurrently both the Node calendar server on port `3001` and the Vite dev server on port `5173`).*
 3. Open **`http://localhost:5173/`** in your browser.
-*(If you get script execution errors on Windows PowerShell, run: `powershell -ExecutionPolicy Bypass -Command "npm run dev"`).*
+4. > [!IMPORTANT]
+   > If you get script execution errors on Windows PowerShell, run the following command to bypass the execution policy:
+   > ```powershell
+   > powershell -ExecutionPolicy Bypass -Command "npm run dev"
+   > ```
 
 ---
 
