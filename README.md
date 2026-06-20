@@ -6,6 +6,7 @@ This repository contains the full integrated codebase and database assets for th
 
 - **`Frontend/`**: The React + Vite client web application, coupled with a Node.js Google Calendar API helper server.
 - **`Backend/`**: The Spring Boot REST API layer.
+- **`booking_bot_project/`**: A Python-based Telegram booking daemon core and retention worker engine.
 - **`database/`**: Contains the **Entity Relationship Diagram (`ERD.png`)** for database design visualization and the exported DDL construction script (`schema.sql`) to initialize your MySQL database.
 
 ---
@@ -29,3 +30,4 @@ Please check the individual directories for detailed configuration and setup ste
 
 - Read **[Frontend/README.md](Frontend/README.md)** to configure and start the React app & calendar sync server.
 - Read **[Backend/README.md](Backend/README.md)** to configure and launch the Spring Boot REST API.
+- Read **[booking_bot_project/README.md](booking_bot_project/README.md)** (or inspect its scripts) to configure and run the Telegram bot and Python worker.
